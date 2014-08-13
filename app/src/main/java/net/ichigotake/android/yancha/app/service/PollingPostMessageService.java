@@ -34,7 +34,6 @@ public final class PollingPostMessageService extends Service {
     private final int POLLING_INTERVAL_MILLISECONDS = 60 * 1000;
     private PreferenceStore preferenceStore;
     private boolean willDestroy;
-    private int lastNotifyMessageId;
 
     public PollingPostMessageService() {
         super.onCreate();
@@ -68,6 +67,7 @@ public final class PollingPostMessageService extends Service {
         );
         NotificationManager notificationManager =
                 (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        ChatMessage shownNotifyMessage = null;
         int lastReadMessageId = preferenceStore.getReadeMessageId();
         int unreadCount = 0;
         for (ChatMessage message : messages) {
@@ -76,21 +76,22 @@ public final class PollingPostMessageService extends Service {
                 continue;
             }
             unreadCount++;
-            if (lastNotifyMessageId > message.getId()) {
-                continue;
-            }
-            lastNotifyMessageId = message.getId();
-            Notification notification = new Notification.Builder(this)
-                    .setContentTitle(message.getNickname())
-                    .setContentText(message.getMessage())
-                    .setTicker(message.getNickname() + ": " + message.getMessage())
-                    .setNumber(unreadCount)
-                    .setContentIntent(intent)
-                    .setSmallIcon(R.drawable.ic_launcher)
-                    .setAutoCancel(true)
-                    .build();
-            notificationManager.notify("yancha", R.drawable.ic_launcher, notification);
+            shownNotifyMessage = message;
         }
+        if (shownNotifyMessage == null) {
+            return ;
+        }
+        preferenceStore.setReadMessageId(shownNotifyMessage.getId());
+        Notification notification = new Notification.Builder(this)
+                .setContentTitle(shownNotifyMessage.getNickname())
+                .setContentText(shownNotifyMessage.getMessage())
+                .setTicker(shownNotifyMessage.getNickname() + ": " + shownNotifyMessage.getMessage())
+                .setNumber(unreadCount)
+                .setContentIntent(intent)
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setAutoCancel(true)
+                .build();
+        notificationManager.notify("yancha", R.drawable.ic_launcher, notification);
     }
 
     public static Intent createIntent(Context context) {
