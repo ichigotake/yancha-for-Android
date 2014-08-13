@@ -15,6 +15,7 @@ import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingBottomInAni
 import net.ichigotake.android.common.os.ActivityJobWorker;
 import net.ichigotake.android.common.os.ActivityJobWorkerClient;
 import net.ichigotake.android.yancha.app.R;
+import net.ichigotake.android.yancha.app.store.PreferenceStore;
 import net.ichigotake.yancha.sdk.chat.ChatMessage;
 import net.ichigotake.yancha.sdk.chat.ChatMessageFactory;
 import net.ichigotake.yancha.sdk.chat.ChatUserFactory;
@@ -73,6 +74,10 @@ public final class ChatMessagesFragment extends Fragment implements SocketIoClie
                     ChatMessage receivedMessage = ChatMessageFactory.create(new JSONObject(response));
                     messages.put(receivedMessage.getId(), receivedMessage);
                     adapter.notifyDataSetChanged();
+                    PreferenceStore preferenceStore = new PreferenceStore(getActivity());
+                    if (receivedMessage.getId() > preferenceStore.getReadeMessageId()) {
+                        preferenceStore.setReadMessageId(receivedMessage.getId());
+                    }
                     break;
                 case DELETE_USER_MESSAGE:
                     ChatMessage deletedMessage = ChatMessageFactory.create(new JSONObject(response));

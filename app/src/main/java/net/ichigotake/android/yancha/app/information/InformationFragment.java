@@ -33,7 +33,6 @@ public final class InformationFragment extends BaseDialogFragment {
         );
         TextView futureFeatureView = (TextView) view.findViewById(R.id.fragment_dialog_information_future_feature);
         String[] futureFeatures = {
-                "通知",
                 "過去ログ検索",
                 "画像投稿",
                 "購読タグの管理",
