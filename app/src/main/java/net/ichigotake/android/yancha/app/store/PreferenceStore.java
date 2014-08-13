@@ -3,6 +3,10 @@ package net.ichigotake.android.yancha.app.store;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import net.ichigotake.yancha.sdk.chat.ChatTag;
+
+import java.util.List;
+
 public final class PreferenceStore {
 
     private final SharedPreferences pref;

@@ -30,6 +30,11 @@ import java.util.List;
 
 public final class PollingPostMessageService extends Service {
 
+    public static Intent createIntent(Context context) {
+        return new Intent(context, PollingPostMessageService.class);
+    }
+
+    private final String LOG_TAG = "PollingPostMessageService";
     private final Handler handler = new Handler();
     private final int POLLING_INTERVAL_MILLISECONDS = 60 * 1000;
     private PreferenceStore preferenceStore;
@@ -71,7 +76,6 @@ public final class PollingPostMessageService extends Service {
         int lastReadMessageId = preferenceStore.getReadeMessageId();
         int unreadCount = 0;
         for (ChatMessage message : messages) {
-            Log.d("PollingPostMessageService", "message: " + message.getMessage());
             if (message.getId() <= lastReadMessageId) {
                 continue;
             }
@@ -85,7 +89,8 @@ public final class PollingPostMessageService extends Service {
         Notification.Builder notificationBuilder = new Notification.Builder(this)
                 .setContentTitle(shownNotifyMessage.getNickname())
                 .setContentText(shownNotifyMessage.getMessage())
-                .setTicker(shownNotifyMessage.getNickname() + ": " + shownNotifyMessage.getMessage())
+                .setTicker(getString(R.string.notification_new_message_body,
+                        shownNotifyMessage.getNickname(), shownNotifyMessage.getMessage()))
                 .setContentIntent(intent)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setAutoCancel(true);
@@ -93,10 +98,6 @@ public final class PollingPostMessageService extends Service {
             notificationBuilder.setNumber(unreadCount);
         }
         notificationManager.notify("yancha", R.drawable.ic_launcher, notificationBuilder.build());
-    }
-
-    public static Intent createIntent(Context context) {
-        return new Intent(context, PollingPostMessageService.class);
     }
 
     private class PollingPostMessage implements Runnable {
@@ -112,6 +113,9 @@ public final class PollingPostMessageService extends Service {
                     new AsyncHttpClient.StringCallback() {
                         @Override
                         public void onCompleted(Exception e, AsyncHttpResponse asyncHttpResponse, String s) {
+                            if (e != null) {
+                                Log.d(LOG_TAG, "", e);
+                            }
                             if (willDestroy) {
                                 return;
                             }
@@ -122,7 +126,7 @@ public final class PollingPostMessageService extends Service {
                                 sendNotification(messages);
                                 restartPolling();
                             } catch (JSONException e1) {
-                                e1.printStackTrace();
+                                Log.d(LOG_TAG, "", e1);
                             }
                         }
                     }
