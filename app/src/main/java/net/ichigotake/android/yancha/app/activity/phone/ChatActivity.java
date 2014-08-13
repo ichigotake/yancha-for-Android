@@ -2,6 +2,7 @@ package net.ichigotake.android.yancha.app.activity.phone;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import net.ichigotake.android.yancha.app.information.InformationFragmentActionPr
 import net.ichigotake.android.yancha.app.joinusers.JoinUsersFragment;
 import net.ichigotake.android.yancha.app.login.LoginDialogFragment;
 import net.ichigotake.android.yancha.app.login.OnGetTokenListener;
+import net.ichigotake.android.yancha.app.store.PreferenceStore;
 import net.ichigotake.android.yancha.app.ui.ProgressBarFragment;
 
 import org.json.JSONException;
@@ -65,6 +67,10 @@ public final class ChatActivity extends Activity
     private SocketIoClient socketIoClient;
     private String token = "";
     private ActivityJobWorker worker = new ActivityJobWorker();
+
+    public static Intent createIntent(Context context) {
+        return new Intent(context, ChatActivity.class);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,11 +134,13 @@ public final class ChatActivity extends Activity
         } else {
             connectSocket(token);
         }
+        new PreferenceStore(this).setChatActivate(true);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        new PreferenceStore(this).setChatActivate(false);
         worker.pause();
         if (socketIoClient != null) {
             socketIoClient.disconnect();
