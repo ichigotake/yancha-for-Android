@@ -82,16 +82,17 @@ public final class PollingPostMessageService extends Service {
             return ;
         }
         preferenceStore.setReadMessageId(shownNotifyMessage.getId());
-        Notification notification = new Notification.Builder(this)
+        Notification.Builder notificationBuilder = new Notification.Builder(this)
                 .setContentTitle(shownNotifyMessage.getNickname())
                 .setContentText(shownNotifyMessage.getMessage())
                 .setTicker(shownNotifyMessage.getNickname() + ": " + shownNotifyMessage.getMessage())
-                .setNumber(unreadCount)
                 .setContentIntent(intent)
                 .setSmallIcon(R.drawable.ic_launcher)
-                .setAutoCancel(true)
-                .build();
-        notificationManager.notify("yancha", R.drawable.ic_launcher, notification);
+                .setAutoCancel(true);
+        if (unreadCount > 1) {
+            notificationBuilder.setNumber(unreadCount);
+        }
+        notificationManager.notify("yancha", R.drawable.ic_launcher, notificationBuilder.build());
     }
 
     public static Intent createIntent(Context context) {
