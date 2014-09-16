@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 'android-L'
+    compileSdkVersion 20
     buildToolsVersion "20.0.0"
 
     defaultConfig {
         applicationId "net.ichigotake.myapplication"
-        minSdkVersion 'L'
-        targetSdkVersion 'L'
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion 16
+        targetSdkVersion 20
+        versionCode 1001
+        versionName "Y"
     }
     buildTypes {
         release {
