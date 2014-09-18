@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ImageView
+        android:id="@+id/chat_message_item_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/chat_message_item_author_container"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/chat_message_item_icon"
+        >
+
+        <TextView
+            android:id="@+id/chat_message_item_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:textSize="12sp"
+            android:paddingTop="0dp"
+            tools:text="ichigotake"
+            />
+
+        <TextView
+            android:id="@+id/chat_message_item_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#aaaaaa"
+            android:textSize="12sp"
+            android:paddingTop="0dp"
+            tools:text="2014-12-12 00:00:00"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/chat_message_item_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/chat_message_item_author_container"
+        android:layout_toRightOf="@+id/chat_message_item_icon"
+        tools:text="おはよう！"
+        />
+
+</RelativeLayout>

@@ -1,4 +1,4 @@
-package net.ichigotake.yancha;
+package net.ichigotake.android.yancha.app;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
